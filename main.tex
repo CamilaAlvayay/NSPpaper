@@ -1,0 +1,643 @@
+% =============================================================================
+% Revitalization in Shrinking Cities: Impact of the Neighborhood
+% Stabilization Program in Detroit
+% Authors: Camila Alvayay Torrejon & Mark Skidmore
+% Target: Journal of Housing Economics
+% =============================================================================
+
+\documentclass[12pt,authoryear]{elsarticle}
+
+% ---- Packages ----
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{threeparttable}
+\usepackage{siunitx}
+\usepackage{float}
+\usepackage{setspace}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{pdflscape}
+\usepackage{rotating}
+\usepackage{appendix}
+\usepackage{longtable}
+\usepackage{lmodern}
+
+% ---- Path for figures ----
+\graphicspath{{../Data/Figures/}}
+
+% ---- Bibliography style ----
+\bibliographystyle{elsarticle-harv}
+
+% ---- Document ----
+\begin{document}
+
+\begin{frontmatter}
+
+\title{Revitalization in Shrinking Cities: Impact of the Neighborhood Stabilization Program in Detroit}
+
+\author[ucn]{Camila Alvayay Torrej\'on\corref{cor1}}
+\ead{alvayayt@ucn.cl}
+\author[msu]{Mark Skidmore}
+\ead{mskidmor@msu.edu}
+
+\cortext[cor1]{Corresponding author.}
+
+\affiliation[ucn]{organization={Department of Economics, Universidad Cat\'olica del Norte},
+            city={Antofagasta},
+            country={Chile}}
+\affiliation[msu]{organization={Department of Agricultural, Food, and Resource Economics, Michigan State University; Lincoln Institute of Land Policy},
+            city={East Lansing, MI},
+            country={United States}}
+
+\begin{abstract}
+The Great Recession resulted in a significant collapse in the United States housing market, with foreclosure rates soaring in cities experiencing long-term economic decline. Detroit, which had the second-highest foreclosure rate among the nation's 100 largest metropolitan areas by the end of 2007, received approximately \$70 million through the Neighborhood Stabilization Program (NSP)---a federal place-based policy targeting the most distressed neighborhoods. This paper evaluates the impact of NSP on housing prices and foreclosure rates in Detroit using a difference-in-differences framework with modern estimators designed for staggered treatment adoption. Employing the \citet{callaway2021} estimator as our primary specification, with augmented inverse probability weighting \citep{wooldridge2023} and traditional two-way fixed effects as robustness checks, we find that once we control for the HUD formula variables that guided neighborhood selection, the apparent treatment effects are small and statistically insignificant for housing prices, and modest for foreclosure rates. This finding suggests that the NSP selection mechanism effectively identified the most distressed areas, and that after accounting for this selection, the program's net impact on broad housing market outcomes was limited. Our results contribute to the growing evidence that place-based interventions in severely distressed markets may stabilize conditions but are insufficient to reverse deep-seated structural decline without complementary investments.
+\end{abstract}
+
+\begin{keyword}
+Neighborhood Stabilization Program \sep Detroit \sep housing market \sep difference-in-differences \sep staggered treatment \sep place-based policy
+\end{keyword}
+
+\begin{keyword}[JEL]
+R31 \sep R38 \sep R58 \sep H53
+\end{keyword}
+
+\end{frontmatter}
+
+\doublespacing
+
+% =============================================================================
+\section{Introduction}
+\label{sec:introduction}
+% =============================================================================
+
+The Great Recession resulted in the most significant collapse in the United States (US) housing market since the Great Depression \citep{wangimmergluck2018}. During this time, property values decreased 31 percent, mortgage delinquencies tripled, and properties in the early stages of the foreclosure process increased from 0.5 to 1.4 percent nationwide \citep{joice2011}. Many homeowners suffered the consequences of the crisis, with accumulating unpaid property tax bills and mortgage debts. These challenges were especially concentrated in cities experiencing long-term economic decline such as Detroit. By the end of 2007, Detroit had the second-highest foreclosure rate among the 100 largest US metropolitan areas, with one in every 31 households affected \citep{realtytrac2007}. According to a report by the Committee on Financial Services from the US House of Representatives, 139,699 of Detroit's 384,672 property foreclosures were the result of mortgage defaults or unpaid taxes, and fifty-six percent of these units became blighted properties in a very short period \citep{committeefinancialservices2019}. The accumulation of deteriorated properties plus excess housing supply resulting from long-term declines in employment and population \citep{alm2014} exacerbated the complex problem of urban blight in the city.
+
+To address the real estate crisis, Congress passed the Housing and Economic Recovery Act (HERA) in July 2008, which allocated funding for emergency assistance to redevelop abandoned and foreclosed homes through the Neighborhood Stabilization Program (NSP). The key mission of the NSP program was to ``help reduce the number of foreclosed and abandoned properties and restore depressed local housing markets'' \citep[p.~2]{gao2010}. This \$7 billion program was allocated to grantees in three distinct stages: NSP1, NSP2, and NSP3. Unlike other policies and programs that the federal government offered to alleviate the consequences of the crisis, the NSP is a place-based policy that directly targets the neighborhoods most affected by the crisis. In the case of Detroit, nine neighborhoods were identified as NSP Target Zones, where funds were allocated in five different types of activities: (1)~establishing financial assistance for the purchasers of foreclosed properties, (2)~rehabilitating residential properties that have been abandoned or foreclosed upon, (3)~establishing and managing land banks, (4)~demolishing blighted structures, and (5)~redeveloping demolished or vacant properties as housing \citep{spader2015}.
+
+More than a decade has passed since the NSP was implemented in Detroit, with a total of nearly \$70 million allocated in the selected zones \citep{huddetroit2016}, but we know little about the program's effectiveness in achieving its core objectives: reducing property foreclosure and revitalizing depressed neighborhood housing markets through increased property values. This research aims to fill the gap by assessing the impact of NSP on these key outcomes. However, conducting policy impact evaluation such as this poses a challenge in causally identifying the effect of the program, because the characteristics of targeted neighborhoods are systematically different from untargeted neighborhoods due to the selection parameters used by local authorities and the HUD allocation formula.
+
+To mitigate this issue, our empirical evaluation relies on modern difference-in-differences (DiD) estimators designed for settings with staggered treatment adoption. We employ the \citet{callaway2021} estimator as our primary specification, which properly accounts for treatment effect heterogeneity across cohorts and time periods. We complement this with the augmented inverse probability weighting (AIPW) estimator proposed by \citet{wooldridge2023}, and present traditional two-way fixed effects (TWFE) results as a benchmark. Importantly, we address the selection problem by controlling for the HUD formula variables---predicted foreclosure rates, subprime loan rates, and residential vacancy rates---that guided the targeting of NSP funds. We demonstrate that these controls are essential: without them, the estimated treatment effects reflect selection bias rather than causal program impacts.
+
+Our analysis focuses on the first round of the program (NSP1), which treated 599 census block groups beginning in 2009. We exclude the third round (NSP3, $N=68$) from the main analysis because those neighborhoods are fundamentally non-comparable to both the NSP1 areas and the control group, exhibiting higher incomes, lower vacancy rates, and different baseline characteristics. We document this non-comparability formally in the appendix.
+
+Using rich residential property-level information from several sources, our results indicate that once HUD formula variables are included as controls, the NSP had no statistically significant effect on housing prices (ATT $= -0.037$ log points, $p = 0.52$) and a modest, borderline-significant positive effect on foreclosure rates (ATT $= +0.087$ percentage points, $p = 0.12$). These findings are consistent across all three estimators. The pattern of results suggests that the NSP selection mechanism effectively targeted the most distressed areas, and that after accounting for this selection, the program's net causal impact on broad housing market outcomes was limited. Notably, without HUD controls, the estimated effects appear large and statistically significant---a finding that we interpret as evidence of selection bias rather than program failure.
+
+Our contribution is three-fold. First, we provide one of the first evaluations of the NSP that explicitly addresses the selection mechanism through HUD formula variables, demonstrating that apparent treatment effects can be entirely explained by the characteristics that drove program targeting. This finding has important implications for evaluating other place-based policies where selection is driven by observable distress indicators. Second, we extend the time frame of the analysis through 2019, allowing us to assess both short- and long-term impacts of the program. Third, we employ state-of-the-art DiD estimators that properly account for the staggered implementation of the NSP, contributing to the growing body of applied work using these methods \citep{roth2023}.
+
+Our null finding is consistent with a growing literature suggesting that place-based interventions in severely distressed markets face inherent limitations. As \citet{glaeser2005} argue, the durability of housing means that declining cities face persistent oversupply that dampens the price effects of demand-side interventions. In Detroit's case, the scale of the crisis---with over 139,000 foreclosures and widespread blight---may have overwhelmed the relatively modest resources of the NSP. Our results echo the findings of \citet{schuetz2016} who found no significant NSP2 effects in Wayne County, Michigan, while other metropolitan areas showed mixed results.
+
+The remainder of the paper is organized as follows. Section~\ref{sec:nsp} describes the NSP program and its implementation in Detroit. Section~\ref{sec:literature} reviews the related literature. Section~\ref{sec:identification} presents the identification strategy. Section~\ref{sec:data} describes the data. Section~\ref{sec:results} presents the results, and Section~\ref{sec:conclusion} concludes.
+
+
+% =============================================================================
+\section{Neighborhood Stabilization Program: A Place-Based Policy}
+\label{sec:nsp}
+% =============================================================================
+
+\subsection{General Features}
+
+By mid-2007, in anticipation of a significant crisis in the financial and real estate sectors, policy measures were put in place to mitigate the impacts. In July 2008, the Housing and Economic Recovery Act was enacted, which authorized the first stage of the Neighborhood Stabilization Program (NSP1). NSP1 was followed by the American Recovery and Reinvestment Act in 2009 (NSP2), and the Dodd-Frank Act in 2010 (NSP3), aiming to support states, local governments, and non-profits in rehabilitating foreclosed properties \citep{immergluck2013}. The goal was two-fold: first, to curb the rapidly escalating foreclosure crisis, and second, to reverse patterns of devaluation in affected neighborhoods, with the Department of Housing and Urban Development (HUD) overseeing fund allocation of \$3.9 billion, \$2 billion, and \$1 billion across NSP1, NSP2, and NSP3, respectively \citep{fraser2015}.
+
+The ultimate objective of a place-based policy is to reduce economic, social, and environmental disparities that arise between places \citep{fainstein1993}. The NSP targeted areas that were more vulnerable yet demonstrated potential to reverse the economic decline. In the words of \citet[p.~139]{joice2011}, ``HUD staff believe that local officials have a tendency to spread community development funding across a town like peanut butter on bread [\ldots] In the case of NSP, HUD believed that such a geographically dispersed strategy would be extremely inappropriate. HUD wanted NSP to be used like a defibrillator---a forceful government intervention to brace a neighborhood before its heart stops for good.'' Therefore, it is important to evaluate this policy emphasizing this spatial dimension, with respect to a counterfactual scenario where resources would have been spread throughout a community in a spatially random allocation.
+
+The allocation of funds in the first round followed a two-step process: a statewide and sub-state formula. The statewide formula considers the number and percentage of foreclosures, subprime loans, loans in default or delinquency, and vacancy rates. Sub-state allocations distributed funds among Community Development Block Grant (CDBG)-eligible grantees within each state using a similar formula. Grantees used information from private sources as well as local data provided by HUD to identify NSP target zones \citep{hud2008}. NSP2 deviates from the other two stages as funds were provided through a competitive application process rather than a formula-based methodology \citep{spader2015}. This discrepancy led to grantees who received funds during the first stage not being selected for the subsequent second stage under similar economic conditions, as exemplified by Detroit. NSP3 returned to a formula-based allocation but with a different set of priorities and a smaller funding envelope.
+
+Michigan was the third state most in need of NSP funds, following Florida and California (see Figure~\ref{fig:nsp_allocation} in the Appendix). Michigan received nearly \$264 million in the first NSP round, with Detroit and Wayne County securing 28\% of these funds, highlighting the acute urban decay and foreclosure crisis, especially in Detroit. Eligible uses of NSP funds included financial assistance for purchasing foreclosed properties, rehabilitating abandoned homes, managing land banks, demolishing blighted structures, and redeveloping vacant properties into productive use \citep{spader2015}. Local governments determined how to prioritize these activities based on their specific needs and assessments.
+
+\subsection{NSP in Detroit}
+
+In 2008, Detroit was a city in crisis, grappling with challenges such as a shrinking population scattered across a large land area, an oversupply of housing, a dwindling tax base, aging housing stock, and outdated infrastructure. To address these issues, the city received approximately \$47 million in NSP1 and almost \$22 million in NSP3 funds \citep{huddetroit2016}, which local officials allocated to areas with the greatest need.
+
+Figure~\ref{fig:target_zones} illustrates the NSP target zones in Detroit, classified by round type, overlaid with 2000 Census block group boundaries. These boundaries are particularly significant as they guided the city with the selection of target areas and serve as the unit of analysis for our research, providing the empirical definition of a ``neighborhood.'' In NSP1, nine neighborhoods were selected based on five factors (see Table~\ref{tab:selection_criteria} in the Appendix), and a similar process was employed for NSP3. Part of these criteria draws from HUD's general guidelines and data, including the designation of low, moderate, and middle-income (LMMH) areas, zones with high foreclosure rates, and areas with a high percentage of homes financed by subprime mortgage-related loans. The remaining criteria align with citywide policies from the Master Plan \citep{pdd2009}. Although Master Plan data from the city were limited, HUD's data enable us to conduct a robust analysis of the target zone selection and the construction of a credible counterfactual.
+
+\begin{figure}[htbp]
+\centering
+%\includegraphics[width=0.8\textwidth]{nsp_target_zones.png}
+\caption{NSP Target Zones in Detroit}
+\label{fig:target_zones}
+\begin{minipage}{\textwidth}
+\footnotesize
+\textit{Source:} Authors' calculations. \textit{Note:} ``NSP1'' refers to the Neighborhood Stabilization Program first round, and ``NSP3'' corresponds to the third round. Block group boundaries from Census 2000.
+\end{minipage}
+\end{figure}
+
+Detroit utilized its NSP funds with a notable focus on demolition, allocating about 30\% of its resources to this activity, highlighting its role in addressing blight through demolition \citep{schuetz2015wp}. Public reports available from the city reveal the status of NSP projects, from which data was organized to produce Figure~\ref{fig:nsp_projects}, which shows the distribution of NSP projects and funds by activity. The majority of NSP projects are associated with the rehabilitation or reconstruction of selected properties in the target zones, with 31 projects in this category. In terms of funding distribution, 48\% is allocated to rehabilitation or reconstruction, and 20\% to clearance and demolitions. This indicates that approximately \$46 million have been designated to return these properties to productive and social use. Despite the high number of rehabilitation projects, demolition ranks second in terms of dollars spent due to the externalization of demolition through the Detroit Land Bank or other private contractors.
+
+\begin{figure}[htbp]
+\centering
+%\includegraphics[width=0.8\textwidth]{nsp_projects_funds.png}
+\caption{NSP Number of Projects and NSP Funds by Category of Activity in Detroit}
+\label{fig:nsp_projects}
+\begin{minipage}{\textwidth}
+\footnotesize
+\textit{Source:} Authors' calculations based on individual quarterly NSP performance reports provided by the City of Detroit.
+\end{minipage}
+\end{figure}
+
+
+% =============================================================================
+\section{Previous Work}
+\label{sec:literature}
+% =============================================================================
+
+The central premise of the NSP implementation is that foreclosure properties contribute to negative externalities within neighborhoods which exacerbate urban blight \citep{spader2015}. The causal mechanisms include: (1)~the visual aspect of decay, creating a perception of an abandoned neighborhood and thereby decreasing neighboring property values; (2)~the consequential increase in the supply of properties due to foreclosures and subsequent vacancy, leading to an overall decline in market prices \citep{schuetz2015}; (3)~a negative perception of neighborhood safety as the number of foreclosed, abandoned, and deteriorated properties grows, which impacts the social infrastructure that can prevent criminal activity \citep{spader2016}; and (4)~a reduction in property tax revenues caused by lower assessed values, which subsequently impacts the provision of public goods and services, further lowering property values and perpetuating the vicious cycle \citep{johnson2008}. Empirical research confirms these negative impacts on property values \citep{lee2008,harding2009,campbell2011,anenberg2014,hartley2014,gerardi2015,zhang2014}, crime rates \citep{spelman1993,ellen2013,kondo2018,stacy2018,larson2019}, and health outcomes \citep{leon2017,wangimmergluck2018,pearson2019}. \citet{frame2010} provides a comprehensive review of the literature on foreclosure spillovers, documenting the range of estimated price effects and the methodological challenges involved.
+
+NSP aims to counteract these effects by demolishing, clearing, constructing new housing, and rehabilitating blighted properties. However, bridging the gap between removing negative externalities and achieving positive neighborhood outcomes, such as enhanced property values or decreased crime, presents a significant challenge. The effectiveness of the policy relies on a multitude of factors identified in previous studies, and it is crucial to recognize that the mere eradication of foreclosure-related negative externalities does not automatically guarantee a corresponding positive impact of equal magnitude in the surrounding properties \citep{alvayay2023}. As \citet{whitaker2013} demonstrate in the context of Cuyahoga County, different types of property distress---vacancy, tax delinquency, and foreclosure---generate distinct spillover patterns, suggesting that a single programmatic response may not address all channels of neighborhood decline.
+
+The theoretical framework for understanding why place-based interventions may have limited effects in severely declining markets draws on the insights of \citet{glaeser2005}, who argue that the durability of housing creates an asymmetry between growing and declining cities. In declining markets, excess supply persists because housing is physically durable, creating a ``floor'' effect that limits the upside potential of demand-side interventions. This is particularly relevant for Detroit, where long-term population decline had created massive housing oversupply well before the foreclosure crisis \citep{alm2014}. The NSP, by focusing on demolition and rehabilitation, addressed both supply (through removal of excess units) and demand (through improved neighborhood quality), but the scale of the crisis may have overwhelmed these efforts.
+
+Mixed evidence on effectiveness of NSP is highlighted in three methodologically similar studies summarized in Table~\ref{tab:prior_studies}. \citet{schuetz2016} evaluated NSP2 at the census tract level across 28 grantees, using regression analysis to compare treated and control tracts, finding no impact in Wayne County and mixed results elsewhere; Cuyahoga County showed positive sales growth, while Miami had negative outcomes. \citet{spader2016} and \citet{bak2017} analyzed property-level impacts, employing a buffer zone approach for creating comparable treatment and control areas. \citet{spader2016} found that NSP demolitions in Cleveland reduced property crimes, with no significant findings in Chicago or Denver, whereas \citet{bak2017} observed a 14.3\% increase in sale prices near NSP projects in Chicago, suggesting a positive property value effect. More recently, several studies in the \textit{Journal of Housing Economics} have examined related questions about the spillover effects of foreclosure and vacancy on housing markets \citep{whitaker2013,ihlanfeldt2016,cui2015}, providing important context for understanding the channels through which the NSP might operate.
+
+\begin{table}[htbp]
+\centering
+\caption{Prior Studies on the Impact of NSP on Different Outcomes}
+\label{tab:prior_studies}
+\begin{threeparttable}
+\small
+\begin{tabularx}{\textwidth}{p{2.2cm}p{2.5cm}p{1.2cm}p{1.3cm}p{2.5cm}p{3cm}p{1cm}}
+\toprule
+Study & Outcome Variable & Unit & Period & Location & Results & NSP Round \\
+\midrule
+\citet{schuetz2016} & Growth rate in annual sales volume, vacant and distressed properties & Census Tract & 2009--2013 & IL, Cuyahoga OH, Los Angeles CA, Wayne MI (counties) & No significant results for Wayne County. & NSP2 \\
+\addlinespace
+\citet{spader2016} & Number of crimes & Property & 2008--2013 & Cleveland, Chicago, Denver & NSP demolitions in Cleveland: reduction of 0.08 property crimes/quarter. No significant effect in Chicago or Denver. & NSP1, NSP2 \\
+\addlinespace
+\citet{bak2017} & log(sale price) & Property & 2008--2014 & Chicago & Homes near NSP projects increased by 14.3\%. & NSP1--3 (rehab only) \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]
+\footnotesize
+\item \textit{Source:} Authors' own elaboration.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+The mentioned studies differ in two main aspects, aside from the variation in key outcome variables. \citet{bak2017} consider all three rounds of NSP and use a longer time frame to estimate the effect. Time is a critical factor when evaluating such policies, as urban revitalization processes may take years to materialize \citep{galster2006,schuetz2015}. Additionally, they focus on the effects of NSP projects that resulted in property rehabilitation, which aims to restore a property to productive use \citep{collins2013} and is observed to have a positive impact on neighboring property values \citep{leonard2017,ganduri2021}. On the other hand, the impact of demolition on neighborhood dynamics can be more ambiguous. For example, research on the Detroit Demolition Program provides an interesting contrast. According to \citet{alvayay2023}, the program, which was applied nearly citywide, shows no overall positive impact on property prices. However, using the same information on demolitions, \citet{alvayay2020} found positive and short-term effects on tax compliance in surrounding properties.
+
+Central to our study is the recognition of the staggered implementation of the NSP policy across different rounds. No study we have encountered thus far has explicitly considered this temporal variation within a modern DiD framework. As \citet{immergluck2013} identified, one of the key challenges with NSP1 implementation was the short 18-month timeline to obligate funds. This tight deadline proved overly ambitious for the execution of complex local redevelopment programs, forcing many recipients to rush their decisions \citep{immergluck2012}. Consequently, the selection process became more about meeting deadlines than effectively identifying and intervening in areas that could benefit most. Due to this rushed process, the first-round beneficiaries were substantially different from those of the third round. The staggered nature of NSP, therefore, presents a key consideration for evaluating its impacts, motivating our use of estimators specifically designed for this setting \citep{callaway2021,wooldridge2023,goodmanbacon2021}.
+
+
+% =============================================================================
+\section{Identification Strategy}
+\label{sec:identification}
+% =============================================================================
+
+\subsection{Empirical Framework}
+
+In order to identify the effect of NSP policy on different outcomes, we define $Y_{it}$ as the dependent variable for census block group $i$ in year $t$. We evaluate the policy on two key variables: (1)~the log of the average residential property sale price, $\ln(\text{price})_{it}$, and (2)~the foreclosure rate, $\text{forerate}_{it}$. Census block groups are categorized as control group (never treated) or NSP1 zones (first treated in 2009).\footnote{We exclude NSP3 zones ($N=68$, first treated in 2011) from the main analysis due to their non-comparability with both NSP1 and control areas. See Appendix~\ref{app:nsp3} for formal documentation.}
+
+Our primary estimator is the \citet{callaway2021} difference-in-differences estimator for settings with multiple time periods and staggered treatment adoption. This estimator properly handles the well-documented biases that arise from using traditional TWFE models when treatment effects are heterogeneous across cohorts and over time \citep{dechaisemartin2020,goodmanbacon2021,roth2023}.
+
+The Callaway and Sant'Anna estimator identifies group-time average treatment effects, $ATT(g,t)$, for each cohort $g$ (defined by the first period of treatment) and each time period $t$:
+\begin{equation}
+ATT(g,t) = \mathbb{E}[Y_t(g) - Y_t(0) \mid G_g = 1]
+\label{eq:att_gt}
+\end{equation}
+where $Y_t(g)$ is the potential outcome under treatment adoption at time $g$, $Y_t(0)$ is the potential outcome under no treatment, and $G_g = 1$ indicates belonging to the cohort first treated at time $g$.
+
+In our setting, with a single treatment cohort (NSP1, $g = 2009$) and a never-treated control group, the identification simplifies considerably. The overall average treatment effect on the treated is:
+\begin{equation}
+ATT = \frac{1}{|\mathcal{T}_{\text{post}}|}\sum_{t \in \mathcal{T}_{\text{post}}} ATT(2009, t)
+\label{eq:att_overall}
+\end{equation}
+where $\mathcal{T}_{\text{post}} = \{2009, 2010, \ldots, 2019\}$.
+
+\subsection{Addressing Selection Bias Through HUD Formula Variables}
+
+A central challenge in evaluating the NSP is that targeted neighborhoods were systematically selected based on observable distress indicators. Detroit's local officials used criteria derived from HUD guidelines and local data to designate NSP target zones (see Table~\ref{tab:selection_criteria} in the Appendix). These criteria included: (1)~being in a low/moderate/middle-income (LMMH) area, (2)~having high foreclosure rates based on HUD data, (3)~having a high percentage of subprime mortgage-related loans, and (4)~alignment with citywide policies from the Master Plan \citep{pdd2009}.
+
+HUD provided grantees with block group-level data including a composite risk score, predicted foreclosure rates, subprime loan rates, and residential vacancy rates. In our data, the HUD risk score is essentially constant across all Detroit block groups (mean $= 9.87$, with the 25th, 50th, 75th, and 90th percentiles all equal to 10), reflecting the fact that the entire city qualified as highly distressed. However, there is meaningful variation in the underlying formula components---the predicted foreclosure rate ($\text{predicted\_foreclo}$), subprime loan rate ($\text{loan\_rate}$), and residential vacancy rate ($\text{usps\_resid\_vac}$)---which exhibit strong relationships with treatment assignment.
+
+We address the selection problem by including these HUD formula variables as covariates in the Callaway and Sant'Anna estimator:
+\begin{equation}
+ATT(g,t) = \mathbb{E}\left[Y_t(g) - Y_t(0) \mid G_g = 1, X_i\right]
+\label{eq:att_controls}
+\end{equation}
+where $X_i = (\text{predicted\_foreclo}_i, \text{loan\_rate}_i, \text{usps\_resid\_vac}_i)$ are the HUD formula variables. This specification implements the doubly robust estimator of \citet{callaway2021}, which combines outcome regression with inverse probability weighting to achieve consistent estimation if either the outcome model or the propensity score model is correctly specified.
+
+The importance of these controls is demonstrated by comparing results with and without them. Without HUD controls, we find large and statistically significant effects: a $-11.1\%$ effect on log sale prices ($p = 0.027$) and a $+23.5$ percentage point effect on foreclosure rates ($p < 0.001$). These large estimates reflect the fact that NSP1 areas had significantly higher predicted foreclosure rates (mean $= 21.3$ vs.~$15.9$ for controls, $p < 0.001$), higher subprime loan rates ($74.9\%$ vs.~$66.8\%$, $p < 0.001$), and higher residential vacancy rates ($19.5\%$ vs.~$16.5\%$, $p < 0.001$). Once these variables are included, the estimated effects shrink dramatically and become statistically insignificant, confirming that the unconditioned estimates were driven by selection on observables rather than causal program effects.
+
+\subsection{Identification Assumptions}
+
+The key identifying assumptions are:
+
+\textbf{Conditional Parallel Trends.} In the absence of treatment, outcomes in the treated and control census block groups would have followed parallel trends over time, conditional on the HUD formula variables. We assess this assumption using pre-trend tests and event study plots. For our preferred specification (log sale prices with HUD controls), the pre-trend test yields $\chi^2(2) = 6.49$ ($p = 0.039$), indicating some evidence of differential pre-trends. For the foreclosure rate, the pre-trend test yields $\chi^2(2) = 1.33$ ($p = 0.513$), providing no evidence against parallel trends. The marginal rejection for log prices motivates caution in interpreting price effects and highlights the importance of the controls.
+
+\textbf{No Anticipation.} Census block groups did not alter their behavior in anticipation of NSP treatment. Given the rapid deployment timeline of NSP1---with HUD's 18-month obligation deadline creating a rushed decision process \citep{immergluck2013}---substantial anticipation effects are unlikely. We use the ``not-yet-treated'' control group specification, which allows the control group to include units that will be treated in later periods, as an additional check.
+
+\subsection{Robustness Estimators}
+
+We complement the Callaway and Sant'Anna estimates with two additional approaches:
+
+\textbf{Augmented Inverse Probability Weighting (AIPW).} We implement the \citet{wooldridge2023} heterogeneous treatment effects estimator via \texttt{xthdidregress} in Stata. This doubly robust estimator incorporates a richer set of covariates including, in addition to the HUD formula variables, baseline demographic characteristics (percent Black, median household income, distance to CBD).
+
+\textbf{Traditional Two-Way Fixed Effects (TWFE).} We present standard panel fixed effects estimates as a benchmark, noting that in our setting with a single treatment cohort, the TWFE bias documented by \citet{goodmanbacon2021} is less severe than in settings with multiple treatment cohorts. We estimate:
+\begin{equation}
+Y_{it} = \alpha_i + \gamma_t + \beta \cdot \text{NSP1}_{it} + X_i' \delta_t + \varepsilon_{it}
+\label{eq:twfe}
+\end{equation}
+where $\alpha_i$ and $\gamma_t$ are block group and year fixed effects, $\text{NSP1}_{it}$ is a binary indicator equal to 1 for NSP1 block groups in post-2009 years, and $X_i' \delta_t$ allows the HUD formula variables to have time-varying effects. Standard errors are clustered at the block group level.
+
+\subsection{Log Transformation of Sale Prices}
+
+Following standard practice in the housing economics literature, we use the natural logarithm of average sale prices as our primary outcome variable. The log transformation addresses several empirical concerns. First, the distribution of sale prices in Detroit is highly right-skewed, with a long tail of high-value transactions. Second, the log specification improves the plausibility of parallel trends---our diagnostic analysis shows that raw price trends are non-parallel in levels but substantially more parallel in logs. Third, the log specification provides estimates that are interpretable as approximate percentage changes.
+
+
+% =============================================================================
+\section{Data}
+\label{sec:data}
+% =============================================================================
+
+\subsection{Data Sources}
+
+This analysis focuses on 1,066 census block groups in Detroit, spanning from 2006 to 2019, with the NSP1 policy starting in 2009, creating a balanced panel of 14,924 observations. For the main analysis (NSP1 vs.\ control), we use 998 block groups (599 NSP1, 399 control) after excluding the 68 NSP3 block groups. Table~\ref{tab:variables} in the Appendix describes all the variables used in the analysis, the time interval, the geographic level, and the source.
+
+We use information on residential property sale prices, foreclosure counts, and foreclosure rates within each census block group, sourced from ZTRAX \citep{zillow2020} and Data Driven Detroit. Key independent variables include property characteristics and geographical features derived from GIS and City of Detroit data, alongside time-variant controls like property age, lot size, and other housing features. The HUD formula variables---predicted foreclosure rates, subprime loan rates, and residential vacancy rates---are sourced from the HUD NSP allocation data \citep{hud2008} and serve as our primary controls for selection. Additional analysis leverages demographic and housing data from the American Community Survey, adjusted for 2000 and 2010 census geographies \citep{logan2014}.
+
+\subsection{Data Description}
+
+Figure~\ref{fig:trends} provides a visual comparison of the two key housing market outcome variables (sale prices and foreclosure rates) over time across the treatment and control groups. The graphs show that prior to treatment in 2009, the trends in these outcomes were relatively similar between treated block groups and those never treated. However, the trajectories diverge in the post-treatment period, with NSP1 areas showing lower sale prices and higher foreclosure rates---a pattern consistent with the selection mechanism that directed NSP funds to the most distressed neighborhoods.
+
+\begin{figure}[htbp]
+\centering
+%\includegraphics[width=0.48\textwidth]{diag_trend_sale_levels.png}
+%\includegraphics[width=0.48\textwidth]{diag_trend_fore_rate.png}
+\caption{Key Dependent Variables Over Time: NSP1 vs.\ Never-Treated Block Groups}
+\label{fig:trends}
+\begin{minipage}{\textwidth}
+\footnotesize
+\textit{Source:} Authors' calculations. \textit{Note:} The figure presents trend trajectories for census block groups that received NSP1 treatment in 2009 and census blocks that never received treatment (controls). Left panel shows average residential property sale prices; right panel shows average foreclosure rates.
+\end{minipage}
+\end{figure}
+
+Table~\ref{tab:summary} provides summary statistics at baseline (2008). NSP1 areas have lower average sale prices (\$19,798 vs.\ \$23,352 for controls), higher foreclosure rates (0.12 vs.\ 0.09), and are significantly different on the HUD formula variables. The predicted foreclosure rate is 21.3 in NSP1 areas versus 15.9 in controls ($p < 0.001$), subprime loan rates are 74.9\% versus 66.8\% ($p < 0.001$), and residential vacancy rates are 19.5\% versus 16.5\% ($p < 0.001$). These systematic differences underscore the need for controlling for the selection mechanism.
+
+\begin{table}[htbp]
+\centering
+\caption{Summary Statistics at Baseline (2008): NSP1 vs.\ Control}
+\label{tab:summary}
+\begin{threeparttable}
+\small
+\begin{tabular}{lrrrrr}
+\toprule
+& \multicolumn{2}{c}{Control ($N = 399$)} & \multicolumn{2}{c}{NSP1 ($N = 599$)} & \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5}
+Variable & Mean & Std.\ Dev. & Mean & Std.\ Dev. & $p$-value \\
+\midrule
+Sale Price (\$) & 23,352 & 25,768 & 19,798 & 16,812 & \\
+ln(Sale Price) & 9.62 & 1.00 & 9.55 & 0.93 & \\
+Foreclosure Rate & 0.09 & 0.13 & 0.12 & 0.16 & \\
+Number of Sales & 12.85 & 10.24 & 16.17 & 13.16 & \\
+\addlinespace
+\multicolumn{6}{l}{\textit{HUD Formula Variables}} \\
+Predicted Foreclosure Rate & 15.89 & --- & 21.33 & --- & $< 0.001$ \\
+Subprime Loan Rate (\%) & 66.80 & --- & 74.94 & --- & $< 0.001$ \\
+Residential Vacancy Rate (\%) & 16.49 & --- & 19.45 & --- & $< 0.001$ \\
+\addlinespace
+\multicolumn{6}{l}{\textit{Demographic Variables}} \\
+\% Black (2009) & 79.25 & --- & 82.36 & --- & 0.001 \\
+Median HH Income (\$) & 30,162 & --- & 28,519 & --- & 0.090 \\
+Distance to CBD (miles) & 6.91 & --- & 6.74 & --- & 0.519 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\footnotesize
+\item \textit{Source:} Authors' calculations. \textit{Note:} $p$-values from two-sample $t$-tests of equality of means. HUD formula variables are time-invariant.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+
+% =============================================================================
+\section{Results}
+\label{sec:results}
+% =============================================================================
+
+\subsection{Main Results: Callaway and Sant'Anna Estimates}
+
+Table~\ref{tab:main_results} presents our main results from the Callaway and Sant'Anna estimator for the two outcome variables. Panel~A shows results for log sale prices. The preferred specification with HUD formula controls (column~1) yields an overall ATT of $-0.037$ ($\text{SE} = 0.057$, $p = 0.524$), indicating no statistically significant effect of NSP1 on housing prices. In contrast, the specification without controls (column~2) yields a much larger and statistically significant estimate of $-0.111$ ($\text{SE} = 0.050$, $p = 0.027$), reflecting the selection bias that arises from comparing distressed NSP1 areas to less-distressed control areas without adjustment. The specification using sale prices in levels with HUD controls (column~3) yields an ATT of $-\$1,373$ ($\text{SE} = \$1,086$, $p = 0.206$), consistent with the log specification.
+
+Panel~B shows results for the foreclosure rate. The preferred specification with HUD controls (column~1) yields an ATT of $+0.087$ ($\text{SE} = 0.056$, $p = 0.120$), suggesting a modest but statistically insignificant increase in foreclosure rates in NSP1 areas. Without controls (column~2), the estimated effect is dramatically larger at $+0.235$ ($\text{SE} = 0.045$, $p < 0.001$), again demonstrating the importance of controlling for the selection mechanism.
+
+\begin{table}[htbp]
+\centering
+\caption{Main Results: Callaway and Sant'Anna Estimates --- NSP1 vs.\ Control}
+\label{tab:main_results}
+\begin{threeparttable}
+\begin{tabular}{lccc}
+\toprule
+& (1) & (2) & (3) \\
+& With HUD Controls & No Controls & Levels, HUD Controls \\
+\midrule
+\multicolumn{4}{l}{\textbf{Panel A: ln(Sale Price)}} \\
+\addlinespace
+ATT & $-0.037$ & $-0.111^{**}$ & $-\$1{,}373$ \\
+& $(0.057)$ & $(0.050)$ & $(\$1{,}086)$ \\
+$p$-value & $0.524$ & $0.027$ & $0.206$ \\
+Pre-trend $\chi^2$ & $6.49$ & --- & --- \\
+Pre-trend $p$ & $0.039$ & --- & --- \\
+Observations & $12{,}704$ & $12{,}704$ & $12{,}704$ \\
+\addlinespace
+\multicolumn{4}{l}{\textbf{Panel B: Foreclosure Rate}} \\
+\addlinespace
+ATT & $+0.087$ & $+0.235^{***}$ & --- \\
+& $(0.056)$ & $(0.045)$ & \\
+$p$-value & $0.120$ & $<0.001$ & --- \\
+Pre-trend $\chi^2$ & $1.33$ & --- & --- \\
+Pre-trend $p$ & $0.513$ & --- & --- \\
+Observations & $13{,}972$ & $13{,}972$ & --- \\
+\addlinespace
+\midrule
+Control group & Not-yet treated & Not-yet treated & Not-yet treated \\
+HUD formula controls & Yes & No & Yes \\
+Block groups & 998 & 998 & 998 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\footnotesize
+\item \textit{Source:} Authors' calculations. \textit{Note:} Estimated using the \citet{callaway2021} estimator with doubly robust (IPW) inference. HUD formula controls include predicted foreclosure rate, subprime loan rate, and residential vacancy rate. Standard errors in parentheses. Pre-trend test: $H_0$: all pre-treatment coefficients equal zero. $^{***} p < 0.01$, $^{**} p < 0.05$, $^{*} p < 0.10$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\subsection{Event Study Analysis}
+
+Figure~\ref{fig:event_sale} presents the event study results for log sale prices from the Callaway and Sant'Anna estimator with HUD controls. The pre-treatment coefficients (Tm2 and Tm1) show some fluctuation but are generally centered around zero, supporting the conditional parallel trends assumption. The post-treatment coefficients oscillate around zero without any clear trend, consistent with no systematic price effect of the NSP1 program. No individual post-treatment coefficient is statistically significant at the 5\% level.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\textwidth]{main_combined_sale.png}
+\caption{Event Study: ln(Sale Price) --- NSP1 vs.\ Control}
+\label{fig:event_sale}
+\begin{minipage}{\textwidth}
+\footnotesize
+\textit{Source:} Authors' calculations. \textit{Note:} Event study coefficients from the Callaway \& Sant'Anna estimator (circles, navy) and the AIPW estimator (diamonds, red). Both specifications include HUD formula controls. The vertical dashed line marks the treatment year (2009). 95\% confidence intervals shown.
+\end{minipage}
+\end{figure}
+
+Figure~\ref{fig:event_fore} presents the event study for the foreclosure rate. The pre-treatment coefficients are close to zero and statistically insignificant, consistent with the pre-trend test ($p = 0.513$). Post-treatment, the coefficients show an inverted-U pattern, with positive effects peaking at periods Tp3--Tp5 (2012--2014) and declining toward zero by the end of the sample period. The peak effects at Tp3 and Tp5 are individually significant, suggesting that NSP1 areas experienced temporarily higher foreclosure rates in the years immediately following the foreclosure crisis peak. By 2017--2019, the effects have largely dissipated, indicating convergence between treated and control areas.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\textwidth]{main_combined_fore.png}
+\caption{Event Study: Foreclosure Rate --- NSP1 vs.\ Control}
+\label{fig:event_fore}
+\begin{minipage}{\textwidth}
+\footnotesize
+\textit{Source:} Authors' calculations. \textit{Note:} Event study coefficients from the Callaway \& Sant'Anna estimator (circles, navy) and the AIPW estimator (diamonds, red). Both specifications include HUD formula controls. The vertical dashed line marks the treatment year (2009). 95\% confidence intervals shown.
+\end{minipage}
+\end{figure}
+
+\subsection{Robustness: AIPW and TWFE Estimates}
+
+Table~\ref{tab:robustness} presents the robustness results from the AIPW and TWFE estimators. The AIPW estimator, which incorporates a richer set of covariates including demographic characteristics, yields an ATT of $-0.027$ ($\text{SE} = 0.003$) for log sale prices and $+0.100$ ($\text{SE} = 0.004$) for the foreclosure rate. While the AIPW standard errors are substantially smaller (reflecting the additional covariates and parametric assumptions), the point estimates are qualitatively consistent with the Callaway and Sant'Anna results: a small negative price effect and a small positive foreclosure effect.
+
+The TWFE estimates without HUD controls (columns~3--4) show large and significant effects ($-0.126$ for prices, $+0.241$ for foreclosure rates), consistent with the uncontrolled C\&S estimates and confirming that the bias from ignoring selection is not specific to any particular estimator. When HUD controls are included with time-varying coefficients (columns~5--6), the TWFE price effect shrinks to $-0.008$ ($\text{SE} = 0.031$) and becomes statistically insignificant, while the foreclosure effect remains modest at $+0.095$ ($\text{SE} = 0.040$). These patterns are fully consistent across all three estimators: large effects without controls that shrink substantially with HUD formula variables.
+
+\begin{table}[htbp]
+\centering
+\caption{Robustness: AIPW and TWFE Estimates --- NSP1 vs.\ Control}
+\label{tab:robustness}
+\begin{threeparttable}
+\small
+\begin{tabular}{lcccccc}
+\toprule
+& \multicolumn{2}{c}{AIPW (Wooldridge)} & \multicolumn{2}{c}{TWFE (no controls)} & \multicolumn{2}{c}{TWFE (HUD controls)} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7}
+& (1) & (2) & (3) & (4) & (5) & (6) \\
+& ln(Price) & Fore.\ Rate & ln(Price) & Fore.\ Rate & ln(Price) & Fore.\ Rate \\
+\midrule
+ATT & $-0.027$ & $+0.100$ & $-0.126$ & $+0.241$ & $-0.008$ & $+0.095$ \\
+& $(0.003)$ & $(0.004)$ & $(0.038)$ & $(0.046)$ & $(0.031)$ & $(0.040)$ \\
+$p$-value & $<0.001$ & $<0.001$ & $0.001$ & $<0.001$ & $0.802$ & $0.018$ \\
+Observations & 13,079 & 13,972 & 13,079 & 13,972 & 13,079 & 13,972 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\footnotesize
+\item \textit{Source:} Authors' calculations. \textit{Note:} Columns (1)--(2): Augmented IPW estimator \citep{wooldridge2023} with HUD formula variables, demographic controls, and distance to CBD. Columns (3)--(4): Traditional TWFE with block group and year fixed effects only. Columns (5)--(6): TWFE with HUD formula variables interacted with year dummies. Standard errors in parentheses; clustered at block group level for TWFE; robust for AIPW. $^{***} p < 0.01$, $^{**} p < 0.05$, $^{*} p < 0.10$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\subsection{Interpretation: Selection vs.\ Treatment Effects}
+
+The consistent pattern across estimators---large effects without controls, small effects with HUD formula controls---has a clear interpretation. The HUD formula variables that guided the NSP targeting process (predicted foreclosure rates, subprime loan rates, and vacancy rates) are strong predictors of both treatment assignment and housing market outcomes. When these variables are omitted, the estimated ``treatment effect'' conflates the causal impact of the program with the pre-existing differences between targeted and non-targeted areas.
+
+This interpretation is supported by the balance tests in Table~\ref{tab:summary}, which show that NSP1 areas differed significantly from controls on all three HUD formula variables. It is further supported by the diagnostic analysis showing that the predicted foreclosure rate has a smooth, positive relationship with treatment probability (ranging from 44\% to 87\%), with no sharp discontinuity that would support a regression discontinuity design. The NSP selection in Detroit was discretionary at the project level, driven by HUD data and local priorities, rather than by a formula with a clear cutoff.
+
+Our finding that the NSP had limited causal effects on housing prices, once selection is properly accounted for, does not necessarily mean the program was ineffective. First, the program may have prevented further deterioration that would have occurred absent the intervention---a ``stabilization'' effect that our DiD framework would attribute to zero if both treated and control areas experienced similar trajectories. Second, the program's benefits may have been localized to the immediate vicinity of specific rehabilitation projects, effects that are averaged away in our block group-level analysis. Third, the scale of Detroit's housing crisis---with over 139,000 foreclosures and decades of population decline \citep{alm2014}---may have overwhelmed the relatively modest NSP resources (\$70 million). As \citet{glaeser2005} argue, the durable nature of housing means that declining cities face persistent oversupply, limiting the efficacy of demand-side interventions.
+
+
+% =============================================================================
+\section{Conclusions}
+\label{sec:conclusion}
+% =============================================================================
+
+This study evaluated the impact of the Neighborhood Stabilization Program in Detroit, focusing on housing prices and foreclosure rates. Using modern difference-in-differences estimators designed for staggered treatment adoption---the \citet{callaway2021} estimator as our primary specification, complemented by \citet{wooldridge2023} AIPW and traditional TWFE---our analysis provides nuanced insights into the effects of this place-based policy.
+
+Our key finding is methodological: the apparent treatment effects of the NSP are almost entirely explained by the HUD formula variables that guided program targeting. Without controlling for predicted foreclosure rates, subprime loan rates, and residential vacancy rates, all estimators yield large and statistically significant effects. Once these selection variables are included, the effects shrink dramatically and become statistically insignificant for housing prices (C\&S ATT $= -0.037$, $p = 0.524$) and modest for foreclosure rates (C\&S ATT $= +0.087$, $p = 0.120$). This pattern is consistent across all three estimation approaches, providing strong evidence that the selection mechanism, rather than treatment effects, drives the unconditioned estimates.
+
+The foreclosure rate results deserve particular attention. The event study reveals an inverted-U pattern, with NSP1 areas experiencing temporarily higher foreclosure rates during 2012--2014, followed by convergence toward control areas by 2017--2019. This pattern is consistent with the mechanics of the foreclosure crisis in Detroit, where the peak of tax foreclosures occurred with a lag relative to the initial mortgage foreclosure wave \citep{alm2014}. The NSP targeted areas with the highest foreclosure risk, and these areas continued to experience elevated foreclosures in the medium term regardless of the intervention.
+
+Our null finding for housing prices is consistent with the broader literature on place-based interventions in severely distressed markets. \citet{schuetz2016} found no significant NSP2 effects in Wayne County, Michigan, while effects were positive in some other metropolitan areas. The key insight from our analysis is that the \textit{selection mechanism itself} can generate the appearance of program effects (or the absence thereof) if not properly accounted for. This has important implications for the evaluation of other place-based policies, such as Opportunity Zones, Promise Zones, and Community Development Block Grants, where targeting is similarly based on observable distress indicators \citep{ding2016}.
+
+Several limitations of our analysis should be noted. First, our block group-level analysis may mask important heterogeneity in treatment effects at finer spatial scales. NSP rehabilitation projects may have generated positive spillovers within their immediate vicinity that are diluted when averaged across entire block groups. Second, the marginal pre-trend test result for log prices ($p = 0.039$) warrants caution, although the pre-trend coefficients are small in magnitude and the conditional parallel trends assumption appears plausible based on the event study plots. Third, our analysis cannot capture general equilibrium effects, such as changes in migration patterns or labor market outcomes, that may result from neighborhood improvement.
+
+Despite these limitations, our analysis demonstrates the value of data-driven program evaluation and the importance of properly accounting for selection mechanisms in the evaluation of place-based policies. As Detroit continues to combat blight through successor programs---including the Proposal N bond-funded demolition initiative---our findings suggest that simply targeting the most distressed areas, while politically justifiable, may not generate measurable improvements in housing market outcomes unless accompanied by broader economic development strategies. The NSP's emphasis on demolition and rehabilitation addressed the physical manifestation of decline but could not, on its own, reverse the fundamental economic forces driving Detroit's shrinking housing market.
+
+\singlespacing
+
+% =============================================================================
+% Bibliography
+% =============================================================================
+
+\bibliography{references}
+
+
+% =============================================================================
+% Appendix
+% =============================================================================
+
+\clearpage
+\appendix
+\doublespacing
+
+\section{NSP Fund Allocation}
+\label{app:allocation}
+
+\begin{figure}[H]
+\centering
+%\includegraphics[width=0.85\textwidth]{nsp_allocation_states.png}
+\caption{Allocation of NSP Funds at the State Level and Within the State of Michigan}
+\label{fig:nsp_allocation}
+\begin{minipage}{\textwidth}
+\footnotesize
+\textit{Source:} Authors' calculations using information from the United States Department of Housing and Urban Development (HUD). \textit{Note:} Bar chart presents the distribution of NSP funds from the first round by state. Michigan was the third-largest recipient. A pie chart showing the distribution within Michigan is presented to the right.
+\end{minipage}
+\end{figure}
+
+
+\section{NSP Target Zone Selection Criteria}
+\label{app:criteria}
+
+\begin{table}[H]
+\centering
+\caption{Criteria for Defining NSP Target Zones in the City of Detroit}
+\label{tab:selection_criteria}
+\begin{threeparttable}
+\small
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+Criteria & Description \\
+\midrule
+LMMH Area & Properties benefiting from NSP must be in low, moderate, and middle-income areas, where over 51\% of people have incomes less than 120\% of the Area Median Income. \\
+\addlinespace
+HUD Data & Properties must be in areas with: highest percentage of foreclosures; highest percentage of homes financed by subprime mortgage-related loans; identified as likely to face a significant rise in the rate of home foreclosures. \\
+\addlinespace
+Foreclosure Data & Properties must have high rates of mortgage foreclosures in 2006 and 2007. Adjusted by the city. \\
+\addlinespace
+Local Target Areas & Areas with high private sector investment (building permits), Block Grant activity, urban renewal activity, and federally designated Empowerment Zone activity. \\
+\addlinespace
+Citywide Policies & Areas congruent with citywide policies from the Master Plan. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]
+\footnotesize
+\item \textit{Source:} Authors' elaboration based on ``Neighborhood Stabilization Plan'' by the Planning and Development Department of the City of Detroit \citep{pdd2009}.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+
+\section{NSP3 Non-Comparability Documentation}
+\label{app:nsp3}
+
+The third round of the NSP (NSP3) was implemented in 2011 in 68 census block groups. We exclude these areas from the main analysis because they are fundamentally non-comparable to both the NSP1 treatment group and the control group. Table~\ref{tab:nsp3_balance} presents the balance tests.
+
+NSP3 areas have significantly higher median household incomes (\$39,235 vs.\ \$30,162 for controls, $p < 0.001$), lower vacancy rates ($13.6\%$ vs.\ $16.5\%$, $p = 0.002$), lower predicted foreclosure rates ($14.7$ vs.\ $15.9$, $p = 0.001$), and lower subprime loan rates ($60.0\%$ vs.\ $66.8\%$, $p = 0.001$). In other words, NSP3 areas were \textit{less} distressed than the control areas on most HUD formula dimensions, suggesting that the third round targeted areas with greater potential for revitalization rather than the most acute distress.
+
+\begin{table}[H]
+\centering
+\caption{Balance Table: NSP3 vs.\ Control (Excluding NSP1)}
+\label{tab:nsp3_balance}
+\begin{threeparttable}
+\small
+\begin{tabular}{lrrrr}
+\toprule
+Variable & Control Mean & NSP3 Mean & Difference & $p$-value \\
+\midrule
+Total Houses (2009) & 1,423 & 1,405 & 19 & 0.671 \\
+Median HH Income & \$30,162 & \$39,235 & $-$\$9,073 & $<0.001$ \\
+\% White (2009) & 13.34 & 17.26 & $-3.91$ & 0.066 \\
+\% Black (2009) & 79.25 & 76.21 & $3.05$ & 0.386 \\
+HUD Risk Score & 9.83 & 9.88 & $-0.05$ & 0.689 \\
+\% $<$ 120\% AMI & 79.69 & 69.44 & $10.25$ & $<0.001$ \\
+Subprime Loan Rate & 66.80 & 59.98 & $6.81$ & 0.001 \\
+Predicted Foreclosure Rate & 15.89 & 14.72 & $1.17$ & 0.001 \\
+Residential Vacancy Rate & 16.49 & 13.63 & $2.86$ & 0.002 \\
+Distance to CBD (miles) & 6.91 & 7.39 & $-0.48$ & 0.239 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\footnotesize
+\item \textit{Source:} Authors' calculations. \textit{Note:} $p$-values from two-sample $t$-tests. Sample excludes NSP1 block groups. $N_{\text{Control}} = 399$, $N_{\text{NSP3}} = 68$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+For completeness, we estimate the Callaway and Sant'Anna model for NSP3 areas using the control group (excluding NSP1). The results, presented in Table~\ref{tab:nsp3_results}, show a large positive and significant effect on log sale prices (ATT $= +0.229$, $p = 0.017$) and a small insignificant effect on foreclosure rates (ATT $= +0.045$, $p = 0.346$). The positive price effect is consistent with NSP3 targeting areas with greater upward potential, but should be interpreted with extreme caution given the small sample size ($N = 68$), the non-comparable baseline characteristics, and the resulting low statistical power. Figures~\ref{fig:nsp3_trends_sale}--\ref{fig:nsp3_event_fore} in this appendix present the trend plots and event study results for NSP3.
+
+\begin{table}[H]
+\centering
+\caption{Appendix: Callaway \& Sant'Anna Results for NSP3 ($N = 68$, Caveat: Low Power)}
+\label{tab:nsp3_results}
+\begin{threeparttable}
+\begin{tabular}{lcc}
+\toprule
+& ln(Sale Price) & Foreclosure Rate \\
+\midrule
+ATT & $+0.229^{**}$ & $+0.045$ \\
+& $(0.096)$ & $(0.048)$ \\
+$p$-value & $0.017$ & $0.346$ \\
+Observations & 5,881 & 6,538 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\footnotesize
+\item \textit{Source:} Authors' calculations. \textit{Note:} Estimated using \citet{callaway2021} with HUD formula controls. Control group: not-yet treated (excluding NSP1). $^{**} p < 0.05$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.48\textwidth]{appendix_nsp3_price_levels.png}
+\includegraphics[width=0.48\textwidth]{appendix_nsp3_price_log.png}
+\caption{Appendix: Sale Price Trends --- NSP3 vs.\ Control}
+\label{fig:nsp3_trends_sale}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.65\textwidth]{appendix_nsp3_forerate.png}
+\caption{Appendix: Foreclosure Rate Trends --- NSP3 vs.\ Control}
+\label{fig:nsp3_trends_fore}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.48\textwidth]{appendix_cs_nsp3_sale.png}
+\includegraphics[width=0.48\textwidth]{appendix_cs_nsp3_fore.png}
+\caption{Appendix: Event Study --- NSP3 C\&S Results}
+\label{fig:nsp3_event_fore}
+\end{figure}
+
+
+\section{Variable Descriptions}
+\label{app:variables}
+
+\begin{table}[H]
+\centering
+\caption{Description of Variables Used in the Analysis}
+\label{tab:variables}
+\begin{threeparttable}
+\small
+\begin{tabularx}{\textwidth}{p{3.5cm}p{5cm}p{2cm}X}
+\toprule
+Variable & Description & Geographic Level & Source \\
+\midrule
+Sale Price & Average residential property sale price & Block group & ZTRAX (Zillow) \\
+ln(Sale Price) & Natural log of average sale price & Block group & Authors' calculation \\
+Foreclosure Rate & Foreclosures / total housing units & Block group & Data Driven Detroit \\
+NSP1 & $=1$ if in NSP1 target zone & Block group & City of Detroit \\
+NSP3 & $=1$ if in NSP3 target zone & Block group & City of Detroit \\
+Predicted Foreclosure & HUD predicted foreclosure rate & Block group & HUD \\
+Loan Rate & \% homes with subprime loans & Block group & HUD \\
+Vacancy Rate & USPS residential vacancy rate & Block group & HUD \\
+Risk Score & HUD composite risk score & Block group & HUD \\
+\% Black & Percent African American & Block group & ACS \\
+MHI & Median household income & Block group & ACS \\
+Distance to CBD & Distance to Central Business District & Block group & GIS \\
+Age & Mean age of properties & Block group & ZTRAX \\
+Lot Size & Mean lot size (sq ft) & Block group & ZTRAX \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]
+\footnotesize
+\item \textit{Source:} Authors' compilation. Time-invariant variables based on 2009 data. Time-varying variables observed annually 2006--2019.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+
+\end{document}
