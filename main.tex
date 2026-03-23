@@ -270,12 +270,12 @@ We use information on residential property sale prices, foreclosure counts, and 
 
 \subsection{Data Description}
 
-Figure~\ref{fig:trends_sale} provides a visual comparison of log sale prices over time across the three groups: never-treated block groups, the NSP1 cohort (treated in 2009), and the NSP3 cohort (treated in 2013). Prior to 2009, the log sale price trends are approximately parallel across all three groups, supporting the conditional parallel trends assumption underlying our identification strategy. After the respective treatment dates, the trajectories diverge modestly, with NSP1 areas showing somewhat lower prices---a pattern consistent with the selection mechanism that directed NSP funds to the most distressed neighborhoods. The NSP3 cohort, which was treated later (2013), shows a trajectory closer to the control group in the pre-2013 period, providing additional identifying variation for the staggered design.
+Figures~\ref{fig:trends_sale} and~\ref{fig:trends_fore} present descriptive trends for the two key outcome variables across the three groups: never-treated block groups, the NSP1 cohort (treated in 2009), and the NSP3 cohort (treated in 2013). Figure~\ref{fig:trends_sale} shows average log sale prices over time. Prior to 2009, the three groups follow broadly similar trajectories, with all experiencing sharp declines during the foreclosure crisis. After treatment, NSP1 areas show somewhat lower prices, consistent with the selection mechanism that directed funds to the most distressed neighborhoods. The NSP3 cohort tracks above the other two groups throughout the sample period, reflecting the different neighborhood characteristics of the later round.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.85\textwidth]{pretrend_lprice_staggered.png}
-\caption{Parallel Trends: ln(Sale Price) by Treatment Cohort}
+\caption{Descriptive Trends: Average ln(Sale Price) by Treatment Cohort}
 \label{fig:trends_sale}
 \begin{minipage}{\textwidth}
 \footnotesize
@@ -283,12 +283,12 @@ Figure~\ref{fig:trends_sale} provides a visual comparison of log sale prices ove
 \end{minipage}
 \end{figure}
 
-Figure~\ref{fig:trends_fore} presents the analogous comparison for foreclosure rates. Pre-treatment trends are closely aligned across all three groups, with foreclosure rates rising sharply during the crisis period (2007--2009) and then declining gradually. The close tracking of the three groups in the pre-treatment period provides visual support for the parallel trends assumption, particularly for the foreclosure rate outcome where the formal pre-trend test yields a $p$-value of $0.066$.
+Figure~\ref{fig:trends_fore} shows the analogous comparison for foreclosure rates. The three groups track closely throughout, with rates rising sharply during the crisis period (2007--2009) and then declining gradually. The close alignment of these unconditional trends is notable, though the formal pre-trend test within the Callaway and Sant'Anna framework---which conditions on the HUD formula variables---provides the appropriate statistical test of the identifying assumption ($p = 0.066$ for foreclosure rates; $p = 0.121$ for log sale prices).
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.85\textwidth]{pretrend_forerate_staggered.png}
-\caption{Parallel Trends: Foreclosure Rate by Treatment Cohort}
+\caption{Descriptive Trends: Average Foreclosure Rate by Treatment Cohort}
 \label{fig:trends_fore}
 \begin{minipage}{\textwidth}
 \footnotesize
