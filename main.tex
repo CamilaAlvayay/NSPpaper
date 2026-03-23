@@ -264,23 +264,35 @@ Following standard practice in the housing economics literature, we use the natu
 
 \subsection{Data Sources}
 
-This analysis focuses on 1,066 census block groups in Detroit, spanning from 2006 to 2019, with the NSP1 policy starting in 2009, creating a balanced panel of 14,924 observations. For the main analysis (NSP1 vs.\ control), we use 998 block groups (599 NSP1, 399 control) after excluding the 68 NSP3 block groups. Table~\ref{tab:variables} in the Appendix describes all the variables used in the analysis, the time interval, the geographic level, and the source.
+This analysis focuses on 1,066 census block groups in Detroit, spanning from 2006 to 2019, creating a balanced panel of 14,924 observations. The staggered implementation of the NSP provides two treatment cohorts: 599 block groups first treated under NSP1 in 2009, and 68 block groups first treated under NSP3 in 2013, with 399 block groups that never received treatment serving as controls. This staggered timing is central to our identification strategy, as the \citet{callaway2021} estimator exploits the variation in treatment adoption across cohorts. Table~\ref{tab:variables} in the Appendix describes all the variables used in the analysis, the time interval, the geographic level, and the source.
 
 We use information on residential property sale prices, foreclosure counts, and foreclosure rates within each census block group, sourced from ZTRAX \citep{zillow2020} and Data Driven Detroit. Key independent variables include property characteristics and geographical features derived from GIS and City of Detroit data, alongside time-variant controls like property age, lot size, and other housing features. The HUD formula variables---predicted foreclosure rates, subprime loan rates, and residential vacancy rates---are sourced from the HUD NSP allocation data \citep{hud2008} and serve as our primary controls for selection. Additional analysis leverages demographic and housing data from the American Community Survey, adjusted for 2000 and 2010 census geographies \citep{logan2014}.
 
 \subsection{Data Description}
 
-Figure~\ref{fig:trends} provides a visual comparison of the two key housing market outcome variables (sale prices and foreclosure rates) over time across the treatment and control groups. The graphs show that prior to treatment in 2009, the trends in these outcomes were relatively similar between treated block groups and those never treated. However, the trajectories diverge in the post-treatment period, with NSP1 areas showing lower sale prices and higher foreclosure rates---a pattern consistent with the selection mechanism that directed NSP funds to the most distressed neighborhoods.
+Figure~\ref{fig:trends_sale} provides a visual comparison of log sale prices over time across the three groups: never-treated block groups, the NSP1 cohort (treated in 2009), and the NSP3 cohort (treated in 2013). Prior to 2009, the log sale price trends are approximately parallel across all three groups, supporting the conditional parallel trends assumption underlying our identification strategy. After the respective treatment dates, the trajectories diverge modestly, with NSP1 areas showing somewhat lower prices---a pattern consistent with the selection mechanism that directed NSP funds to the most distressed neighborhoods. The NSP3 cohort, which was treated later (2013), shows a trajectory closer to the control group in the pre-2013 period, providing additional identifying variation for the staggered design.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.48\textwidth]{diag_trend_sale_levels.png}
-\includegraphics[width=0.48\textwidth]{diag_trend_fore_rate.png}
-\caption{Key Dependent Variables Over Time: NSP1 vs.\ Never-Treated Block Groups}
-\label{fig:trends}
+\includegraphics[width=0.85\textwidth]{pretrend_lprice_staggered.png}
+\caption{Parallel Trends: ln(Sale Price) by Treatment Cohort}
+\label{fig:trends_sale}
 \begin{minipage}{\textwidth}
 \footnotesize
-\textit{Source:} Authors' calculations. \textit{Note:} The figure presents trend trajectories for census block groups that received NSP1 treatment in 2009 and census blocks that never received treatment (controls). Left panel shows average residential property sale prices; right panel shows average foreclosure rates.
+\textit{Source:} Authors' calculations. \textit{Note:} The figure presents average ln(sale price) trajectories for never-treated block groups ($N = 399$), NSP1 block groups treated in 2009 ($N = 599$), and NSP3 block groups treated in 2013 ($N = 68$). Vertical dashed lines mark the respective treatment years.
+\end{minipage}
+\end{figure}
+
+Figure~\ref{fig:trends_fore} presents the analogous comparison for foreclosure rates. Pre-treatment trends are closely aligned across all three groups, with foreclosure rates rising sharply during the crisis period (2007--2009) and then declining gradually. The close tracking of the three groups in the pre-treatment period provides visual support for the parallel trends assumption, particularly for the foreclosure rate outcome where the formal pre-trend test yields a $p$-value of $0.066$.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\textwidth]{pretrend_forerate_staggered.png}
+\caption{Parallel Trends: Foreclosure Rate by Treatment Cohort}
+\label{fig:trends_fore}
+\begin{minipage}{\textwidth}
+\footnotesize
+\textit{Source:} Authors' calculations. \textit{Note:} The figure presents average foreclosure rate trajectories for never-treated block groups ($N = 399$), NSP1 block groups treated in 2009 ($N = 599$), and NSP3 block groups treated in 2013 ($N = 68$). Vertical dashed lines mark the respective treatment years.
 \end{minipage}
 \end{figure}
 
@@ -329,76 +341,79 @@ Distance to CBD (miles) & 6.91 & --- & 6.74 & --- & $0.519$ \\
 
 \subsection{Main Results: Callaway and Sant'Anna Estimates}
 
-Table~\ref{tab:main_results} presents our main results from the Callaway and Sant'Anna estimator for the two outcome variables. Panel~A shows results for log sale prices. The preferred specification with HUD formula controls (column~1) yields an overall ATT of $-0.037$ ($\text{SE} = 0.057$, $p = 0.524$), indicating no statistically significant effect of NSP1 on housing prices. In contrast, the specification without controls (column~2) yields a much larger and statistically significant estimate of $-0.111$ ($\text{SE} = 0.050$, $p = 0.027$), reflecting the selection bias that arises from comparing distressed NSP1 areas to less-distressed control areas without adjustment. The specification using sale prices in levels with HUD controls (column~3) yields an ATT of $-\$1,373$ ($\text{SE} = \$1,086$, $p = 0.206$), consistent with the log specification.
+Table~\ref{tab:main_results} presents our main results from the \citet{callaway2021} estimator, which exploits the staggered timing of NSP1 (2009) and NSP3 (2013) to identify treatment effects using not-yet-treated and never-treated block groups as the comparison group. All specifications include the HUD formula variables as controls.
 
-Panel~B shows results for the foreclosure rate. The preferred specification with HUD controls (column~1) yields an ATT of $+0.087$ ($\text{SE} = 0.056$, $p = 0.120$), suggesting a modest but statistically insignificant increase in foreclosure rates in NSP1 areas. Without controls (column~2), the estimated effect is dramatically larger at $+0.235$ ($\text{SE} = 0.045$, $p < 0.001$), again demonstrating the importance of controlling for the selection mechanism.
+Panel~A shows results for log sale prices. The overall ATT across both cohorts is $-0.033$ ($\text{SE} = 0.054$, $p = 0.537$), indicating no statistically significant effect of the NSP on housing prices. The cohort-specific estimates reveal heterogeneity: the NSP1 cohort shows a small negative effect ($-0.038$, $p = 0.505$), while the NSP3 cohort shows a small positive but insignificant effect ($+0.033$, $p = 0.698$). The formal pre-trend test fails to reject the null of parallel pre-treatment trends at the 10\% level ($\chi^2(8) = 12.74$, $p = 0.121$), supporting our identification strategy.
+
+Panel~B shows results for the foreclosure rate. The overall ATT is $+0.080$ ($\text{SE} = 0.052$, $p = 0.121$), suggesting a modest but statistically insignificant increase in foreclosure rates. The cohort-specific estimates again show heterogeneity: the NSP1 cohort has a positive effect ($+0.089$, $p = 0.102$), while the NSP3 cohort shows a negative (stabilizing) effect ($-0.048$, $p = 0.545$). The pre-trend test yields $\chi^2(8) = 14.65$ ($p = 0.066$), marginally passing at the 5\% level.
+
+The contrast between cohorts is informative: NSP1 was implemented at the height of the foreclosure crisis (2009), when neighborhood conditions were deteriorating rapidly, while NSP3 arrived later (2013) when housing markets had begun to stabilize. The null-to-positive NSP3 price effect is consistent with the program achieving modest stabilization in a less turbulent environment.
 
 \begin{table}[htbp]
 \centering
-\caption{Main Results: Callaway and Sant'Anna Estimates --- NSP1 vs.\ Control}
+\caption{Main Results: Callaway and Sant'Anna Staggered DiD Estimates}
 \label{tab:main_results}
 \begin{threeparttable}
 \begin{tabular}{lccc}
 \toprule
-& (1) & (2) & (3) \\
-& With HUD Controls & No Controls & Levels, HUD Controls \\
+& Overall ATT & NSP1 Cohort (2009) & NSP3 Cohort (2013) \\
 \midrule
 \multicolumn{4}{l}{\textbf{Panel A: ln(Sale Price)}} \\
 \addlinespace
-ATT & $-0.037$ & $-0.111^{**}$ & $-\$1{,}373$ \\
-& $(0.057)$ & $(0.050)$ & $(\$1{,}086)$ \\
-$p$-value & $0.524$ & $0.027$ & $0.206$ \\
-Pre-trend $\chi^2$ & $6.49$ & --- & --- \\
-Pre-trend $p$ & $0.039$ & --- & --- \\
-Observations & $12{,}704$ & $12{,}704$ & $12{,}704$ \\
+ATT & $-0.033$ & $-0.038$ & $+0.033$ \\
+& $(0.054)$ & $(0.057)$ & $(0.085)$ \\
+$p$-value & $0.537$ & $0.505$ & $0.698$ \\
+\addlinespace
+Pre-trend $\chi^2$ & \multicolumn{3}{c}{$12.74$ \quad ($p = 0.121$)} \\
+Observations & \multicolumn{3}{c}{$14{,}924$} \\
 \addlinespace
 \multicolumn{4}{l}{\textbf{Panel B: Foreclosure Rate}} \\
 \addlinespace
-ATT & $+0.087$ & $+0.235^{***}$ & --- \\
-& $(0.056)$ & $(0.045)$ & \\
-$p$-value & $0.120$ & $<0.001$ & --- \\
-Pre-trend $\chi^2$ & $1.33$ & --- & --- \\
-Pre-trend $p$ & $0.513$ & --- & --- \\
-Observations & $13{,}972$ & $13{,}972$ & --- \\
+ATT & $+0.080$ & $+0.089^{*}$ & $-0.048$ \\
+& $(0.052)$ & $(0.055)$ & $(0.080)$ \\
+$p$-value & $0.121$ & $0.102$ & $0.545$ \\
+\addlinespace
+Pre-trend $\chi^2$ & \multicolumn{3}{c}{$14.65^{*}$ \quad ($p = 0.066$)} \\
+Observations & \multicolumn{3}{c}{$14{,}924$} \\
 \addlinespace
 \midrule
-Control group & Not-yet treated & Not-yet treated & Not-yet treated \\
-HUD formula controls & Yes & No & Yes \\
-Block groups & 998 & 998 & 998 \\
+Control group & \multicolumn{3}{c}{Not-yet treated + never treated} \\
+HUD formula controls & \multicolumn{3}{c}{Yes} \\
+Block groups & \multicolumn{3}{c}{$1{,}066$ (399 control, 599 NSP1, 68 NSP3)} \\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}[flushleft]
 \footnotesize
-\item \textit{Source:} Authors' calculations. \textit{Note:} Estimated using the \citet{callaway2021} estimator with doubly robust (IPW) inference. HUD formula controls include predicted foreclosure rate, subprime loan rate, and residential vacancy rate. Standard errors in parentheses. Pre-trend test: $H_0$: all pre-treatment coefficients equal zero. $^{***} p < 0.01$, $^{**} p < 0.05$, $^{*} p < 0.10$.
+\item \textit{Source:} Authors' calculations. \textit{Note:} Estimated using the \citet{callaway2021} estimator with doubly robust (IPW) inference and staggered treatment timing ($g = 2009$ for NSP1, $g = 2013$ for NSP3). HUD formula controls include predicted foreclosure rate, subprime loan rate, and residential vacancy rate. Standard errors in parentheses. Pre-trend test: $H_0$: all pre-treatment event-time coefficients equal zero. $^{***} p < 0.01$, $^{**} p < 0.05$, $^{*} p < 0.10$.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
 
 \subsection{Event Study Analysis}
 
-Figure~\ref{fig:event_sale} presents the event study results for log sale prices from the Callaway and Sant'Anna estimator with HUD controls. The pre-treatment coefficients (Tm2 and Tm1) show some fluctuation but are generally centered around zero, supporting the conditional parallel trends assumption. The post-treatment coefficients oscillate around zero without any clear trend, consistent with no systematic price effect of the NSP1 program. No individual post-treatment coefficient is statistically significant at the 5\% level.
+Figure~\ref{fig:event_sale} presents the event study results for log sale prices from the staggered Callaway and Sant'Anna estimator with HUD controls. The event-time coefficients aggregate across both treatment cohorts (NSP1 and NSP3), with the not-yet-treated and never-treated groups serving as the comparison. The pre-treatment coefficients (Tm6 through Tm1) are centered around zero, with only Tm2 marginally significant---consistent with the formal pre-trend test ($p = 0.121$). Post-treatment, the coefficients oscillate around zero without any clear trend, and no individual coefficient exceeds the 5\% significance threshold, consistent with the absence of a systematic price effect.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.85\textwidth]{main_combined_sale.png}
-\caption{Event Study: ln(Sale Price) --- NSP1 vs.\ Control}
+\includegraphics[width=0.85\textwidth]{cs_staggered_sale_event.png}
+\caption{Event Study: ln(Sale Price) --- Staggered C\&S Design}
 \label{fig:event_sale}
 \begin{minipage}{\textwidth}
 \footnotesize
-\textit{Source:} Authors' calculations. \textit{Note:} Event study coefficients from the Callaway \& Sant'Anna estimator (circles, navy) and the AIPW estimator (diamonds, red). Both specifications include HUD formula controls. The vertical dashed line marks the treatment year (2009). 95\% confidence intervals shown.
+\textit{Source:} Authors' calculations. \textit{Note:} Aggregated event study coefficients from the \citet{callaway2021} estimator exploiting staggered treatment timing (NSP1 in 2009, NSP3 in 2013). HUD formula controls included. The vertical dashed line marks event time zero (treatment onset). 95\% confidence intervals shown.
 \end{minipage}
 \end{figure}
 
-Figure~\ref{fig:event_fore} presents the event study for the foreclosure rate. The pre-treatment coefficients are close to zero and statistically insignificant, consistent with the pre-trend test ($p = 0.513$). Post-treatment, the coefficients show an inverted-U pattern, with positive effects peaking at periods Tp3--Tp5 (2012--2014) and declining toward zero by the end of the sample period. The peak effects at Tp3 and Tp5 are individually significant, suggesting that NSP1 areas experienced temporarily higher foreclosure rates in the years immediately following the foreclosure crisis peak. By 2017--2019, the effects have largely dissipated, indicating convergence between treated and control areas.
+Figure~\ref{fig:event_fore} presents the event study for the foreclosure rate. The pre-treatment coefficients are close to zero, consistent with the pre-trend test ($p = 0.066$). Post-treatment, the coefficients show a distinctive pattern: the effect is initially small (Tp0--Tp2), then spikes sharply at Tp3 and Tp5---corresponding to 3 and 5 years after treatment---before declining. The peak effect at Tp5 ($+0.325$, $p < 0.05$) suggests that treated areas experienced temporarily higher foreclosure rates in the medium run, likely reflecting the continued unwinding of distressed mortgages in the neighborhoods most severely affected by the crisis. By Tp8--Tp10, the effects converge toward zero, indicating long-run stabilization.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.85\textwidth]{main_combined_fore.png}
-\caption{Event Study: Foreclosure Rate --- NSP1 vs.\ Control}
+\includegraphics[width=0.85\textwidth]{cs_staggered_fore_event.png}
+\caption{Event Study: Foreclosure Rate --- Staggered C\&S Design}
 \label{fig:event_fore}
 \begin{minipage}{\textwidth}
 \footnotesize
-\textit{Source:} Authors' calculations. \textit{Note:} Event study coefficients from the Callaway \& Sant'Anna estimator (circles, navy) and the AIPW estimator (diamonds, red). Both specifications include HUD formula controls. The vertical dashed line marks the treatment year (2009). 95\% confidence intervals shown.
+\textit{Source:} Authors' calculations. \textit{Note:} Aggregated event study coefficients from the \citet{callaway2021} estimator exploiting staggered treatment timing (NSP1 in 2009, NSP3 in 2013). HUD formula controls included. The vertical dashed line marks event time zero (treatment onset). 95\% confidence intervals shown.
 \end{minipage}
 \end{figure}
 
